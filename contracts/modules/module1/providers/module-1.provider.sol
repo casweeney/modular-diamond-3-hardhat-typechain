@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import {Module1Schema as Schema} from "../../../global/dto/schemas/module-1.schema.sol";
 import {Positions} from "../../../global/dto/positions.sol";
 import {Module1Errors as Errors} from "../../../global/errors/module-1.error.sol";
+import {Module1Events as Events} from "../../../global/events/module-1.event.sol";
 import {IERC20} from "../controllers/IERC20.controller.sol";
 
 library Module1Provider {
@@ -18,10 +19,12 @@ library Module1Provider {
     function updateBalance(address _user, uint256 _amount) internal {
         Schema.Module1Storage storage m1s = Module1Storage();
 
-        if(_amount <= 0) {
+        if (_amount <= 0) {
             revert Errors.NOT_ZERO_AMOUNT();
         }
 
         m1s.balances[_user] = _amount;
+
+        emit Events.BalanceUpdated(_user, _amount);
     }
 }
